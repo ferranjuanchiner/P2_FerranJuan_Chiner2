@@ -26,6 +26,7 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.android.P2_JuanChiner_Ferran2.content.FilmDetailFragment;
 import com.example.android.P2_JuanChiner_Ferran2.content.FilmUtils;
 
 /**
@@ -34,7 +35,7 @@ import com.example.android.P2_JuanChiner_Ferran2.content.FilmUtils;
 public class FilmDetailActivity extends AppCompatActivity {
 
     // SongItem includes the song title and detail.
-    public FilmUtils.Film mFilm;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,16 +52,18 @@ public class FilmDetailActivity extends AppCompatActivity {
 
         // This activity displays the detail. In a real-world scenario,
         // get the data from a content repository.
-        mFilm = FilmUtils.FILM_ITEMS.get
-                (getIntent().getIntExtra(FilmUtils.FILM_ID_KEY, 0));
-        // Show the detail information in a TextView.
-        if (mFilm != null) {
-            ((TextView) findViewById(R.id.film_detail))
-                    .setText(mFilm.details);
-            ImageView img =((ImageView) findViewById(R.id.filmDetailView));
-            img.setImageResource(mFilm.image);
+        if (savedInstanceState == null) {
+            int selectedSong =
+                    getIntent().getIntExtra(FilmUtils.FILM_ID_KEY, 0);
+            FilmDetailFragment fragment =
+                    FilmDetailFragment.newInstance(selectedSong);
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.song_detail_container, fragment)
+                    .commit();
         }
-    }
+
+        }
+
 
     /**
      * Performs action if the user selects the Up button.

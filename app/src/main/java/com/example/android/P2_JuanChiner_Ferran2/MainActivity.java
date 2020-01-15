@@ -27,6 +27,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.android.P2_JuanChiner_Ferran2.content.FilmDetailFragment;
 import com.example.android.P2_JuanChiner_Ferran2.content.FilmUtils;
 
 import java.util.List;
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
      *
      * @param savedInstanceState
      */
+    private boolean mTwoPane = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +59,9 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
+        if (findViewById(R.id.song_detail_container) != null) {
+            mTwoPane = true;
+        }
 
         // Get the song list as a RecyclerView.
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.film_list);
@@ -115,6 +120,25 @@ public class MainActivity extends AppCompatActivity {
                             holder.getAdapterPosition());
                     context.startActivity(intent);
                 }
+            });
+            holder.mView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mTwoPane) {
+                        int selectedSong = holder.getAdapterPosition();
+                        FilmDetailFragment fragment =
+                                FilmDetailFragment.newInstance(selectedSong);
+                        getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.song_detail_container, fragment)
+                                .addToBackStack(null)
+                                .commit();
+                    } else {
+                    Context context = v.getContext();
+                    Intent intent = new Intent(context, FilmDetailActivity.class);
+                    intent.putExtra(FilmUtils.FILM_ID_KEY,
+                            holder.getAdapterPosition());
+                    context.startActivity(intent);
+                }}
             });
         }
 
